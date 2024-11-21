@@ -170,7 +170,27 @@ class HelloWorld
             else if(temp == "competition")
             {
                 L Lis = new L();
-                Lis.writeFile(3, 4);
+                int t1 = 1;
+                int t2 = 1;
+                try
+                {
+                    Console.WriteLine("Введите количество спротсменов");
+                    t1 = Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Ошибка, здано стандартное значение.");
+                }
+                try
+                {
+                    Console.WriteLine("Введите количество дисцеплин");
+                    t2 = Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Ошибка, здано стандартное значение.");
+                }
+                Lis.writeFile(t1, t2);
                 Lis.readeFile();
             }
         }    

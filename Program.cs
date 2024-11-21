@@ -56,7 +56,6 @@ class HelloWorld
             else if (temp == "AddBack")
             {
                 L Lis = new L();
-                L Lis2 = new L();
                 int t = 1;
                 string step = "";
                 try

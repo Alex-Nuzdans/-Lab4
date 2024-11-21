@@ -176,85 +176,87 @@ namespace Lists
             }
             return Hashs.Count();
         }
-        public void writeFile(int N,int M)
-        {
-            string Name = "";
-            string LName = "";
-            string text = "";
-            int c = 0;
-            string[] texts;
-            L lis = new L();
-            for (int i = 0; i < N; i++) {
-                
-                text = Console.ReadLine();
-                texts = text.Split(' ');
-                while (texts[0].Length > 20)
-                {
-                    Console.WriteLine("Слишком большое имя. Введите ещё раз.");
-                    texts[0] = Console.ReadLine();
-                }
-                while (texts[1].Length > 12)
-                {
-                    Console.WriteLine("Слишком большая фамилия. Введите её ещё раз.");
-                    texts[1] = Console.ReadLine();
-                }
-                lis.nDict(texts[0], texts[1]);
-                for (int j = 2; j < M+2; j++) {
-                    try
-                    {
-                        c = Convert.ToInt32(texts[j]);
-                    }
-                    catch
-                    {
-                        c = 0;
-                    }
-                    lis.nDict(texts[0], texts[1], c,2);
-                }
-            }
-            foreach(var s in lis.Tost.Keys)
+    public void writeFile(int N,int M)
+    {
+        string text = "";
+        int c = 0;
+        string[] texts;
+        L lis = new L();
+        for (int i = 0; i < N; i++) {
+            Console.WriteLine("Введите через пробел имя фамилию и баллы за каждый вид спрота спортсмена");
+            text = Console.ReadLine();
+            texts = text.Split(' ');
+            while (texts[0].Length > 20)
             {
-                lis.Keys.Add(s);
-                lis.Values.Add(lis.Tost[s]);
+                Console.WriteLine("Слишком большое имя. Введите ещё раз.");
+                texts[0] = Console.ReadLine();
             }
-            XmlSerializer f = new XmlSerializer(typeof(L));
-            using (FileStream fs = new FileStream("date.xml", FileMode.OpenOrCreate))
+            while (texts[1].Length > 12)
             {
-                f.Serialize(fs, lis);
+                Console.WriteLine("Слишком большая фамилия. Введите её ещё раз.");
+                texts[1] = Console.ReadLine();
             }
-
+            lis.nDict(texts[0], texts[1]);
+            for (int j = 2; j < M+2; j++) {
+                try
+                {
+                    c = Convert.ToInt32(texts[j]);
+                }
+                catch
+                {
+                    c = 0;
+                }
+                lis.nDict(texts[0], texts[1], c,2);
+            }
         }
-        public void readeFile()
+        foreach(var s in lis.Tost.Keys)
         {
-            XmlSerializer f = new XmlSerializer(typeof(L));
-            L lis = new L();
-            using (FileStream fs = new FileStream("date.xml", FileMode.OpenOrCreate))
+            lis.Keys.Add(s);
+            lis.Values.Add(lis.Tost[s]);
+        }
+        XmlSerializer f = new XmlSerializer(typeof(L));
+        using (FileStream fs = new FileStream("date.xml", FileMode.OpenOrCreate))
+        {
+            f.Serialize(fs, lis);
+        }
+
+    }
+    public void readeFile()
+    {
+        XmlSerializer f = new XmlSerializer(typeof(L));
+        L lis = new L();
+        using (FileStream fs = new FileStream("date.xml", FileMode.OpenOrCreate))
+        {
+            lis=f.Deserialize(fs) as L;
+        }
+        int c = 0;
+        foreach (var i in lis.Keys) {
+            lis.nDict(i, lis.Values[c]);
+            c++;
+        }
+        Dictionary<String, int> D = new Dictionary<string, int>();
+        int temp = 0;
+        foreach(var s in lis.Tost.Keys)
+        {
+            foreach(var t in lis.Tost[s])
             {
-                lis=f.Deserialize(fs) as L;
+                temp += t;
             }
-            int c = 0;
-            foreach (var i in lis.Keys) {
-                lis.nDict(i, lis.Values[c]);
+            D.Add(s, temp);
+            temp = 0;
+        }
+        var CD = from entry in D orderby entry.Value ascending select entry;
+        c = 1;
+        var T="null";
+        foreach(var i in CD.Reverse())
+        {
+            Console.Write(Convert.ToString(i));
+            Console.WriteLine(" "+c);
+            if (T != Convert.ToString(i))
+            {
                 c++;
-            }
-            Dictionary<String, int> D = new Dictionary<string, int>();
-            int temp = 0;
-            foreach(var s in lis.Tost.Keys)
-            {
-                foreach(var t in lis.Tost[s])
-                {
-                    temp += t;
                 }
-                D.Add(s, temp);
-                temp = 0;
-            }
-            var CD = from entry in D orderby entry.Value ascending select entry;
-            c = 1;
-            foreach(var i in CD.Reverse())
-            {
-                Console.Write(Convert.ToString(i));
-                Console.WriteLine(" "+c);
-                c++;
-                
+        
             }
         }
 
